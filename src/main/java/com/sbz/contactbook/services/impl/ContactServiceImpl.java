@@ -4,6 +4,7 @@ import com.sbz.contactbook.domain.entities.Contact;
 import com.sbz.contactbook.repositories.ContactRepository;
 import com.sbz.contactbook.services.ContactService;
 import com.sbz.contactbook.utils.Rol;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -67,10 +68,10 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public List<Contact> findAll() {
-        Iterable<Contact> contactsIterable = contactRepository.findAll();
-        List<Contact> result = new ArrayList<>();
-        contactsIterable.forEach(result::add);
-        return result;
+        return contactRepository.findAll(
+                Sort.by("firstName")
+                        .and(Sort.by("lastName"))
+        );
     }
 
     @Override

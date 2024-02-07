@@ -1,10 +1,12 @@
 package com.sbz.contactbook.repositories;
 
 import com.sbz.contactbook.domain.entities.Contact;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -14,4 +16,7 @@ public interface ContactRepository extends CrudRepository<Contact, Long> {
     Optional<Contact> findByFullName(String firstName, String LastName);
 
     Optional<Contact> findByPhone(String phone);
+
+    // Retrieve all contacts according to sort given
+    List<Contact> findAll(Sort sort);
 }
