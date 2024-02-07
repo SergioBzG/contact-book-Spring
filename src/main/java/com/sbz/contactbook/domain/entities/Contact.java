@@ -3,15 +3,20 @@ package com.sbz.contactbook.domain.entities;
 
 import com.sbz.contactbook.utils.Rol;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Builder
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="contact")
+@Data
+@Entity
+@Table(name="contact", uniqueConstraints = {@UniqueConstraint(columnNames = {"firstName", "lastName"})})
 public class Contact {
     @Id
     @SequenceGenerator(
@@ -22,86 +27,37 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_sequence")
     private Long id;
 
+    @NotNull(message = "rol is required")
     @Enumerated(EnumType.ORDINAL)
     private Rol rol;
 
+    @NotNull(message = "firstName is required")
+    @NotBlank
     private String firstName;
+
+    @NotNull(message = "lastName is required")
+    @NotBlank
     private String lastName;
+
+    @NotNull(message = "address is required")
+    @NotBlank
     private String address;
+
+    @Column(unique = true)
+    @NotNull(message = "phone is required")
+    @NotBlank
     private String phone;
+
     private String companyName;
     private String city;
     private String website;
 
-    public Long getId() {
-        return id;
+    public boolean checkCompanyRol() {
+        boolean hasCompanyName = (this.getCompanyName() != null) && !this.getCompanyName().isBlank();
+        boolean hasCity = (this.getCity() != null) && !this.getCity().isBlank();
+        boolean hasWebSite = (this.getWebsite() != null) && !this.getWebsite().isBlank();
+
+        return hasCompanyName && hasCity && hasWebSite;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
 }
